@@ -1,0 +1,4 @@
+openai==1.57.2
+pyTelegramBotAPI
+python-dotenv
+groq
