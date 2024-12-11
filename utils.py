@@ -106,13 +106,29 @@ def get_gpt_response(text: str, client, task: str):
             stream=False
         ).choices[0].message.content
     
-    elif task == 'report':
+    elif task == 'weekly-report':
         response = client.chat.completions.create(
             model = 'gpt-4o',
             messages = [
                 {
                     "role": "system",
                     "content": "You are a report assistant, user will give you a breif explannation of what he did during the week and you are supposed to wrap everything up in a weekly-report format. use markdown"
+                },
+                {
+                    "role":"user",
+                    "content": f"{text}"
+                }
+            ],
+            stream=False
+        ).choices[0].message.content
+
+    elif task == 'daily-report':
+        response = client.chat.completions.create(
+            model = 'gpt-4o',
+            messages = [
+                {
+                    "role": "system",
+                    "content": "use the information that is provided by the user to create a daily report. use markdown"
                 },
                 {
                     "role":"user",
