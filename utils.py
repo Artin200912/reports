@@ -106,9 +106,25 @@ def get_gpt_response(text: str, client, task: str):
             stream=False
         ).choices[0].message.content
     
+    elif task == 'monthly-report':
+        response = client.chat.completions.create(
+            model = 'gpt-4o-mini',
+            messages = [
+                {
+                    "role": "system",
+                    "content": "You are a report assistant, user will give you a breif explannation of what he did during the week and you are supposed to wrap everything up in a weekly-report format. use markdown"
+                },
+                {
+                    "role":"user",
+                    "content": f"{text}"
+                }
+            ],
+            stream=False
+        ).choices[0].message.content
+
     elif task == 'weekly-report':
         response = client.chat.completions.create(
-            model = 'gpt-4o',
+            model = 'gpt-4o-mini',
             messages = [
                 {
                     "role": "system",
@@ -124,11 +140,43 @@ def get_gpt_response(text: str, client, task: str):
 
     elif task == 'daily-report':
         response = client.chat.completions.create(
-            model = 'gpt-4o',
+            model = 'gpt-4o-mini',
             messages = [
                 {
                     "role": "system",
-                    "content": "use the information that is provided by the user to create a daily report. use markdown"
+                    "content": "use the information that is provided by the user to create a daily report.ensure that user provided the date of the report. use markdown"
+                },
+                {
+                    "role":"user",
+                    "content": f"{text}"
+                }
+            ],
+            stream=False
+        ).choices[0].message.content
+        
+    elif task == 'worked_hours':
+        response = client.chat.completions.create(
+            model = 'gpt-4o-mini',
+            messages = [
+                {
+                    "role": "system",
+                    "content": "extract this information from the provided text : how many hours they spent on AI-Dev, How many hours they spent on Application-Dev. output the follwing json : {'ai': int, 'app': int}. dont output it like : ``` json ```"
+                },
+                {
+                    "role":"user",
+                    "content": f"{text}"
+                }
+            ],
+            stream=False
+        ).choices[0].message.content
+
+    elif task == 'worked_hours':
+        response = client.chat.completions.create(
+            model = 'gpt-4o-mini',
+            messages = [
+                {
+                    "role": "system",
+                    "content": "extract this information from the provided text : how many hours they spent on AI-Dev, How many hours they spent on Application-Dev. output the follwing json : {'ai': int, 'app': int}. dont output it like : ``` json ```"
                 },
                 {
                     "role":"user",
